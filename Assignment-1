@@ -1,0 +1,149 @@
+import random
+ 
+ 
+class Vehicle:
+   def _init_(self, name, max_speed, mileage):
+       self.name = name
+       self.max_speed = max_speed
+       self.mileage = mileage
+ 
+   def seating_capacity(self, capacity):
+       return f"The seating capacity of a {self.name} is {capacity} passengers"
+ 
+ 
+class Bus(Vehicle):
+   def __init__(self, name):
+       self.name = name
+       self.seatingcapacity = 25
+       self.standingcapacity = 15
+       self.current_seating_passengers = []
+       self.current_standing_passengers = []
+ 
+   def get_name(self):
+       return self.name
+ 
+   def seating_capacity(self):
+       return f"The current seating capacity of a {self.name} is {self.seatingcapacity} passengers"
+ 
+   def get_count_of_passangers(self):
+       return f"Currently there are {len(self.current_seating_passengers) + len(self.current_standing_passengers)} passengers in Bus {self.name}."
+ 
+   def deallocate_seat(self):
+       if len(self.current_standing_passengers) != 0:
+           return f"Passenger with ID {self.current_standing_passengers.pop()} deallocated from bus {self.name}. Standing Space freed."
+       elif len(self.current_seating_passengers) != 0:
+           return f"Passenger with ID {self.current_seating_passengers.pop()} deallocated from bus {self.name}. Seating Space freed."
+       else:
+           return f"No Passenger to deallocate in any bus."
+ 
+   def allocate_seat(self):
+       while True:
+           random_number = random.randint(1, 50)  # as there can be max 40 passengers.
+           if random_number not in self.current_standing_passengers and random_number not in self.current_seating_passengers:
+               break
+       if self.seatingcapacity != 0:
+           self.current_seating_passengers.append(random_number)
+           self.seatingcapacity = self.seatingcapacity - 1
+           return f"Allocated Seat in Bus {self.name} with ID {random_number}. Seat allocated is in Seating space."
+       elif self.standingcapacity != 0:
+           self.current_standing_passengers.append(random_number)
+           self.standingcapacity = self.standingcapacity - 1
+           return f"Allocated Seat in Bus {self.name} with ID {random_number}. Seat allocated is in Standing space."
+ 
+ 
+class Car(Vehicle):
+ 
+   def __init__(self, name):
+       self.name = name
+       self.seatingcapacity = 5
+       self.standingcapacity = 0
+       self.current_passengers = []
+ 
+   def get_name(self):
+       return self.name
+ 
+   def seating_capacity(self):
+       return f"The current seating capacity of a {self.name} is {self.seatingcapacity} passengers"
+ 
+   def get_count_of_passangers(self):
+       return f"Currently there are {len(self.current_passengers)} passengers in Car {self.name}."
+ 
+   def deallocate_seat(self):
+       return f"Passenger with ID {self.current_passengers.pop()} deallocated from car {self.name}"
+ 
+   def allocate_seat(self):
+       while True:
+           random_number = random.randint(1, 7)  # as there can be max 5 passengers.
+           if random_number not in self.current_passengers:
+               break
+       self.current_passengers.append(random_number)
+       self.seatingcapacity = self.seatingcapacity - 1
+ 
+       return f"Allocated Seat in Car {self.name} with ID {random_number}"
+ 
+ 
+if __name__ == "__main__":
+ 
+   car1 = Car("Car101")
+   car2 = Car("Car202")
+   bus = Bus("Bus303")
+ 
+   # Initial Passenger Checks
+   print(car1.get_count_of_passangers())
+   print(car2.get_count_of_passangers())
+   print(bus.get_count_of_passangers())
+ 
+   continue_loop = True
+   while continue_loop:
+       print(f"-------------------------")
+       print(f"1. Allocate A Seat in Car")
+       print(f"2. Allocate A Seat in Bus")
+       print(f"3. Deallocate A Seat in Car")
+       print(f"4. Deallocate A Seat in Bus")
+       print(f"5. Get Count of Passenger in Car")
+       print(f"6. Get Count of Passenger in Bus")
+       print(f"7. Exit")
+       print(f"-------------------------")
+ 
+       user_input = input("Enter Your Choice[1-7]:")
+       user_input = int(user_input.strip())
+       if user_input < 1 or user_input > 7:
+           print(f"Incorrect Choice. Try Again.")
+           continue
+       if user_input == 7:
+           continue_loop = False
+           continue
+ 
+       if user_input == 1:
+           if car1.seatingcapacity != 0:
+               print(car1.allocate_seat())
+           elif car2.seatingcapacity != 0:
+               print(car2.allocate_seat())
+           else:
+               print("No Seating Capacity in any car available.")
+ 
+       if user_input == 2:
+           if bus.seatingcapacity != 0 or bus.standingcapacity != 0:
+               print(bus.allocate_seat())
+           else:
+               print("No Seating or Standing Capacity in any bus available.")
+ 
+       if user_input == 3:
+           if len(car1.current_passengers) != 0:
+               print(car1.deallocate_seat())
+           elif len(car2.current_passengers) != 0:
+               print(car2.deallocate_seat())
+           else:
+               print("No Passenger to deallocate in any car.")
+ 
+       if user_input == 4:
+           print(bus.deallocate_seat())
+ 
+       if user_input == 5:
+           print(car1.get_count_of_passangers())
+           print(car2.get_count_of_passangers())
+ 
+       if user_input == 6:
+           print(bus.get_count_of_passangers())
+
+
